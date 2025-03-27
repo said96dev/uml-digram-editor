@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 215 100% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 215 100% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 215 100% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animation for edges */
+@keyframes flowAnimation {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Touch-specific optimizations */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Larger touch targets for controls */
+.react-flow__controls button {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+/* Ensure text is readable on all backgrounds */
+.react-flow__node {
+  @apply shadow-sm;
+}
+
+/* UML specific styles */
+.uml-node {
+  @apply bg-white border-2 border-gray-300 shadow-md;
+}
+
+.uml-node.selected {
+  @apply border-primary;
+}
+
+.uml-node-handle {
+  @apply w-3 h-3 bg-white border-2 border-gray-400;
+}
+
+/* Sticky note styles */
+.sticky-note {
+  @apply bg-yellow-100 shadow-md p-3 rounded-sm;
+  transform: rotate(-1deg);
+}
+
+.sticky-note:nth-child(even) {
+  transform: rotate(1deg);
+  @apply bg-blue-100;
+}
+
+.sticky-note:nth-child(3n) {
+  transform: rotate(-0.5deg);
+  @apply bg-green-100;
+}
+
+.sticky-note:nth-child(5n) {
+  transform: rotate(0.5deg);
+  @apply bg-purple-100;
+}
+
+/* Improved edge styles */
+.uml-edge {
+  @apply stroke-gray-600;
+  stroke-width: 1.5;
+}
+
+.uml-edge.dashed {
+  stroke-dasharray: 5, 5;
+}
+
+.uml-edge.dotted {
+  stroke-dasharray: 2, 2;
+}
+
+/* Diagram type specific colors */
+.use-case-node {
+  @apply bg-blue-50;
+}
+
+.class-node {
+  @apply bg-green-50;
+}
+
+.state-node {
+  @apply bg-purple-50;
+}
+
+.activity-node {
+  @apply bg-orange-50;
+}
+
+.sequence-node {
+  @apply bg-cyan-50;
+}
+
+/* Multi-selection styles */
+.react-flow__nodes.selected {
+  @apply outline-dashed outline-2 outline-primary;
+}
+
