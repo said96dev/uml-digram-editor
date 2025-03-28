@@ -9,7 +9,6 @@ import {
   NodeResizer,
 } from 'reactflow'
 import { Input } from '@/components/ui/input'
-import { ResizeIcon } from './ResizeIcon'
 
 interface UseCaseNodeData {
   name: string

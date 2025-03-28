@@ -4,18 +4,14 @@ import { useState, useEffect } from 'react'
 import { LandingPage } from '@/components/landing-page'
 import dynamic from 'next/dynamic'
 import { ReactFlowProvider } from 'reactflow'
+import { tree } from 'next/dist/build/templates/app-page'
+import { DiagramEditor } from '@/components/diagram-editor'
 
 // Dynamically import DiagramEditor with SSR disabled
-const DiagramEditor = dynamic(
-  () => import('@/components/diagram-editor').then((mod) => mod.DiagramEditor),
-  {
-    ssr: false,
-  }
-)
 
 export default function Home() {
   const [showEditor, setShowEditor] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Simulate loading for a smoother experience
   useEffect(() => {

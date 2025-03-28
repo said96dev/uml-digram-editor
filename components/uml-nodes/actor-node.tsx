@@ -15,16 +15,18 @@ export const ActorNode = memo(
   ({ data, selected }: NodeProps<ActorNodeData>) => {
     const [name, setName] = useState(data.name || 'Actor')
     const [dimensions, setDimensions] = useState({
-      width: data?.width || 180,
-      height: data?.height || 200,
+      width: data?.width || 100,
+      height: data?.height || 120,
     })
     return (
       <div
-        className='p-4 rounded-lg bg-blue-50 border-2 shadow-md relative'
+        className={` p-4 rounded-lg  shadow-md relative bg-blue-50 border-2 ${
+          selected ? 'border-primary' : 'border-gray-300'
+        } shadow-md`}
         style={{
           width: dimensions.width,
           height: dimensions.height,
-          borderColor: selected ? 'var(--primary)' : '#D1D5DB',
+          transition: 'width 0.2s, height 0.2s',
         }}
       >
         <NodeResizer
