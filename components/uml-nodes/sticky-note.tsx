@@ -4,6 +4,7 @@ import { memo, useState } from 'react'
 import { type NodeProps, NodeResizer, Position, Handle } from 'reactflow'
 import { Textarea } from '@/components/ui/textarea'
 import { GripVertical } from 'lucide-react'
+import { useNodeUpdate } from '@/hooks/use-node-update'
 
 interface StickyNoteData {
   text: string
@@ -13,7 +14,7 @@ interface StickyNoteData {
 }
 
 export const StickyNote = memo(
-  ({ data, selected }: NodeProps<StickyNoteData>) => {
+  ({ data, selected, id }: NodeProps<StickyNoteData>) => {
     const [text, setText] = useState(data.text || 'Add your notes here...')
     const colors = [
       'bg-yellow-100',
@@ -30,7 +31,11 @@ export const StickyNote = memo(
       width: data?.width || 150,
       height: data?.height || 100,
     })
-
+    const { updateNodeData, updateNodeDataBatch } = useNodeUpdate()
+    const handleTextChange = (newText: string) => {
+      setText(newText)
+      updateNodeData(id, 'text', newText)
+    }
     const handleColorChange = () => {
       setColorIndex((colorIndex + 1) % colors.length)
     }
@@ -58,6 +63,12 @@ export const StickyNote = memo(
           keepAspectRatio={false}
           onResize={(_, newDimensions) => {
             setDimensions(newDimensions)
+          }}
+          onResizeEnd={(_, newDimensions) => {
+            updateNodeDataBatch(id, {
+              width: newDimensions.width,
+              height: newDimensions.height,
+            })
           }}
         />
 
@@ -100,7 +111,7 @@ export const StickyNote = memo(
         <div className='h-full  p-0 w-full m-0'>
           <Textarea
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => handleTextChange(e.target.value)}
             className='!max-w-[1000px] !min-h-[40px] border-none shadow-none bg-transparent resize-none h-full !text-xs p-0 m-0 '
             placeholder='Add your notes here...'
           />

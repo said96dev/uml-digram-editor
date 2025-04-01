@@ -175,3 +175,13 @@
   @apply outline-dashed outline-2 outline-primary;
 }
 
+/* Selection box styling */
+.react-flow__selection {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px dashed #3b82f6;
+}
+
+/* Selected node styling */
+.react-flow__node.selected {
+  @apply ring-2 ring-primary ring-offset-2;
+}

@@ -3,6 +3,7 @@
 import { memo, useState } from 'react'
 import { Handle, Position, type NodeProps, NodeResizer } from 'reactflow'
 import { Input } from '@/components/ui/input'
+import { useNodeUpdate } from '@/hooks/use-node-update'
 
 interface StateNodeData {
   name: string
@@ -12,7 +13,7 @@ interface StateNodeData {
 }
 
 export const StateNode = memo(
-  ({ data, selected }: NodeProps<StateNodeData>) => {
+  ({ data, selected, id }: NodeProps<StateNodeData>) => {
     const [name, setName] = useState(data.name || 'State')
     const type = data.type || 'normal'
 
@@ -83,6 +84,11 @@ export const StateNode = memo(
       width: data?.width || 150,
       height: data?.height || 80,
     })
+    const { updateNodeData } = useNodeUpdate()
+    const handleTextChange = (newText: string) => {
+      setName(newText)
+      updateNodeData(id, 'name', newText)
+    }
     return (
       <div
         className={`relative p-4 rounded-xl bg-purple-50 border-2 ${
@@ -131,7 +137,7 @@ export const StateNode = memo(
           {selected ? (
             <Input
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => handleTextChange(e.target.value)}
               className='text-center border-none shadow-none bg-transparent'
               onBlur={(e) => {
                 // Update node data here if needed

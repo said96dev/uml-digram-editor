@@ -136,6 +136,7 @@ export function DiagramEditor() {
       if (savedDiagram) {
         const { savedNodes, savedEdges, savedDiagramType } =
           JSON.parse(savedDiagram)
+        console.log('🚀 ~ useEffect ~ savedNodes:', savedNodes)
         setNodes(savedNodes)
         setEdges(savedEdges)
         setDiagramType(savedDiagramType)
@@ -400,10 +401,10 @@ export function DiagramEditor() {
     (event: React.MouseEvent) => {
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect()
       if (!reactFlowBounds) return
-
+      console.log(reactFlowBounds)
       const position = project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
+        x: event.clientX,
+        y: event.clientY - reactFlowBounds.height / 2,
       })
 
       const newNode = {

@@ -9,8 +9,8 @@ import { DiagramEditor } from '@/components/diagram-editor'
 // Dynamically import DiagramEditor with SSR disabled
 
 export default function Home() {
-  const [showEditor, setShowEditor] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [showEditor, setShowEditor] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Simulate loading for a smoother experience
   useEffect(() => {

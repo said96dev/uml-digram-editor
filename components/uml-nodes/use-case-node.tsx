@@ -5,10 +5,11 @@ import {
   Handle,
   Position,
   type NodeProps,
-  NodeResizeControl,
   NodeResizer,
+  useReactFlow,
 } from 'reactflow'
 import { Input } from '@/components/ui/input'
+import { useNodeUpdate } from '@/hooks/use-node-update'
 
 interface UseCaseNodeData {
   name: string
@@ -17,13 +18,17 @@ interface UseCaseNodeData {
 }
 
 export const UseCaseNode = memo(
-  ({ data, selected }: NodeProps<UseCaseNodeData>) => {
+  ({ data, selected, id }: NodeProps<UseCaseNodeData>) => {
     const [name, setName] = useState(data.name || 'Use Case')
     const [dimensions, setDimensions] = useState({
       width: data?.width || 100,
       height: data?.height || 50,
     })
-
+    const { updateNodeData, updateNodeDataBatch } = useNodeUpdate()
+    const handleTextChange = (newText: string) => {
+      setName(newText)
+      updateNodeData(id, 'name', newText)
+    }
     return (
       <div
         className={` rounded-full bg-blue-50 border-2 ${
@@ -45,6 +50,12 @@ export const UseCaseNode = memo(
           keepAspectRatio={false}
           onResize={(_, newDimensions) => {
             setDimensions(newDimensions)
+          }}
+          onResizeEnd={(_, newDimensions) => {
+            updateNodeDataBatch(id, {
+              width: newDimensions.width,
+              height: newDimensions.height,
+            })
           }}
         />
 
@@ -84,7 +95,7 @@ export const UseCaseNode = memo(
           {selected ? (
             <Input
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => handleTextChange(e.target.value)}
               className='text-center border-none shadow-none bg-transparent w-full'
               onBlur={(e) => {
                 // Update node data here if needed

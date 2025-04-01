@@ -4,6 +4,7 @@ import { memo, useState } from 'react'
 import { Handle, Position, type NodeProps, NodeResizer } from 'reactflow'
 import { User } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { useNodeUpdate } from '@/hooks/use-node-update'
 
 interface ActorNodeData {
   name: string
@@ -12,12 +13,18 @@ interface ActorNodeData {
 }
 
 export const ActorNode = memo(
-  ({ data, selected }: NodeProps<ActorNodeData>) => {
+  ({ data, selected, id }: NodeProps<ActorNodeData>) => {
     const [name, setName] = useState(data.name || 'Actor')
     const [dimensions, setDimensions] = useState({
       width: data?.width || 100,
       height: data?.height || 120,
     })
+    const { updateNodeData, updateNodeDataBatch } = useNodeUpdate()
+    const handleTextChange = (newText: string) => {
+      setName(newText)
+      updateNodeData(id, 'name', newText)
+    }
+    console.log(data.name)
     return (
       <div
         className={` p-4 rounded-lg  shadow-md relative bg-blue-50 border-2 ${
@@ -39,6 +46,12 @@ export const ActorNode = memo(
           keepAspectRatio={false}
           onResize={(_, newDimensions) => {
             setDimensions(newDimensions)
+          }}
+          onResizeEnd={(_, newDimensions) => {
+            updateNodeDataBatch(id, {
+              width: newDimensions.width,
+              height: newDimensions.height,
+            })
           }}
         />
 
@@ -75,7 +88,7 @@ export const ActorNode = memo(
           {selected ? (
             <Input
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => handleTextChange(e.target.value)}
               className='text-center border-none shadow-none bg-transparent text-sm w-full'
               onBlur={(e) => {
                 // Update node data here if needed
