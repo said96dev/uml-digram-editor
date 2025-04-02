@@ -1,13 +1,7 @@
 'use client'
 
 import { memo, useState } from 'react'
-import {
-  Handle,
-  Position,
-  type NodeProps,
-  NodeResizer,
-  useReactFlow,
-} from 'reactflow'
+import { Handle, Position, type NodeProps, NodeResizer } from 'reactflow'
 import { Input } from '@/components/ui/input'
 import { useNodeUpdate } from '@/hooks/use-node-update'
 
@@ -46,7 +40,7 @@ export const UseCaseNode = memo(
           minWidth={100}
           minHeight={50}
           handleStyle={{ width: 8, height: 8 }}
-          lineStyle={{ stroke: '#1971c2', strokeWidth: 1 }}
+          lineStyle={{ stroke: '#1971c2', strokeWidth: 3 }}
           keepAspectRatio={false}
           onResize={(_, newDimensions) => {
             setDimensions(newDimensions)

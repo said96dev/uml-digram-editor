@@ -185,3 +185,89 @@
 .react-flow__node.selected {
   @apply ring-2 ring-primary ring-offset-2;
 }
+
+.react-flow__edge-path {
+  stroke-width: 3;
+}
+
+/* Text Node Specific Styles */
+.text-node-container {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.text-node-textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.text-node-textarea:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+}
+
+.text-node-text {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* Override ReactFlow's default node styling */
+.react-flow__node-text {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.react-flow__node-text.selected {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  background-color: transparent !important;
+  ring-width: 0 !important;
+  ring-offset-width: 0 !important;
+}
+
+/* Override any potential shadcn styling */
+.react-flow__node-text .border,
+.react-flow__node-text .shadow,
+.react-flow__node-text .ring,
+.react-flow__node-text .outline {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  ring-width: 0 !important;
+}
+
+/* Add styles for connection points on lifelines */
+.lifeline-connection-point {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.lifeline-connection-point:hover {
+  opacity: 1;
+}
+
+/* Fügen Sie einen allgemeinen Stil für alle Kanten hinzu */
+.react-flow__edge-path {
+  stroke-width: 5 !important ;
+  stroke: rgb(205, 209, 212) !important;
+}

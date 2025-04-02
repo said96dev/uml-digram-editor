@@ -41,7 +41,7 @@ export const NoteNode = memo(
           minWidth={150}
           minHeight={50}
           handleStyle={{ width: 8, height: 8 }}
-          lineStyle={{ stroke: '#1971c2', strokeWidth: 1 }}
+          lineStyle={{ stroke: '#1971c2', strokeWidth: 3 }}
           keepAspectRatio={false}
           onResizeEnd={(_, newDimensions) => {
             updateNodeDataBatch(id, {

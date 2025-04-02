@@ -49,40 +49,6 @@ export function useUMLNodes() {
           },
         ]
 
-      case DiagramType.Sequence:
-        return [
-          {
-            id: 'lifeline1',
-            type: 'lifeline',
-            position: { x: centerX - spacing * 1.5, y: centerY - spacing },
-            data: { name: 'User' },
-          },
-          {
-            id: 'lifeline2',
-            type: 'lifeline',
-            position: { x: centerX, y: centerY - spacing },
-            data: { name: 'System' },
-          },
-          {
-            id: 'lifeline3',
-            type: 'lifeline',
-            position: { x: centerX + spacing * 1.5, y: centerY - spacing },
-            data: { name: 'Database' },
-          },
-          {
-            id: 'note2',
-            type: 'note',
-            position: { x: centerX + spacing * 2, y: centerY },
-            data: { text: 'Authentication process' },
-          },
-          {
-            id: 'sticky2',
-            type: 'sticky',
-            position: { x: centerX - spacing * 1.5, y: centerY + spacing },
-            data: { text: 'Sequence diagram notes...', color: 'bg-blue-100' },
-          },
-        ]
-
       case DiagramType.Activity:
         return [
           {
@@ -103,19 +69,17 @@ export function useUMLNodes() {
             position: { x: centerX, y: centerY + spacing * 0.7 },
             data: { name: 'Valid?', type: 'decision' },
           },
+
           {
             id: 'activity2',
             type: 'activity',
-            position: {
-              x: centerX + spacing * 1.5,
-              y: centerY + spacing * 0.7,
-            },
-            data: { name: 'Report Error', type: 'action' },
+            position: { x: centerX - spacing, y: centerY + spacing * 1.8 },
+            data: { name: 'Task A', type: 'action' },
           },
           {
             id: 'end1',
             type: 'activity',
-            position: { x: centerX, y: centerY + spacing * 1.7 },
+            position: { x: centerX, y: centerY + spacing * 2.8 },
             data: { name: 'End', type: 'end' },
           },
           {
@@ -175,88 +139,6 @@ export function useUMLNodes() {
               y: centerY + spacing * 0.7,
             },
             data: { text: 'State diagram notes...', color: 'bg-purple-100' },
-          },
-        ]
-
-      case DiagramType.Communication:
-        return [
-          {
-            id: 'object1',
-            type: 'object',
-            position: { x: centerX - spacing, y: centerY - spacing * 0.3 },
-            data: { name: 'Client' },
-          },
-          {
-            id: 'object2',
-            type: 'object',
-            position: { x: centerX + spacing, y: centerY - spacing * 0.3 },
-            data: { name: 'Server' },
-          },
-          {
-            id: 'object3',
-            type: 'object',
-            position: { x: centerX, y: centerY + spacing * 0.7 },
-            data: { name: 'Database' },
-          },
-          {
-            id: 'note4',
-            type: 'note',
-            position: { x: centerX + spacing * 2, y: centerY + spacing * 0.7 },
-            data: {
-              text: 'Communication diagram for client-server architecture',
-            },
-          },
-          {
-            id: 'sticky5',
-            type: 'sticky',
-            position: {
-              x: centerX - spacing * 1.5,
-              y: centerY + spacing * 1.7,
-            },
-            data: {
-              text: 'Communication diagram notes...',
-              color: 'bg-orange-100',
-            },
-          },
-        ]
-
-      case DiagramType.Timing:
-        return [
-          {
-            id: 'timeline1',
-            type: 'timeline',
-            position: {
-              x: centerX - spacing * 0.8,
-              y: centerY - spacing * 0.3,
-            },
-            data: { name: 'Process A' },
-          },
-          {
-            id: 'timeline2',
-            type: 'timeline',
-            position: {
-              x: centerX - spacing * 0.8,
-              y: centerY + spacing * 0.7,
-            },
-            data: { name: 'Process B' },
-          },
-          {
-            id: 'note5',
-            type: 'note',
-            position: {
-              x: centerX + spacing * 1.5,
-              y: centerY + spacing * 0.7,
-            },
-            data: { text: 'Timing diagram for parallel processes' },
-          },
-          {
-            id: 'sticky6',
-            type: 'sticky',
-            position: {
-              x: centerX + spacing * 1.5,
-              y: centerY - spacing * 0.3,
-            },
-            data: { text: 'Timing diagram notes...', color: 'bg-cyan-100' },
           },
         ]
 
@@ -332,41 +214,19 @@ export function useUMLNodes() {
           },
         ]
 
-      case DiagramType.Sequence:
-        return [
-          {
-            id: 'e1-2',
-            source: 'lifeline1',
-            target: 'lifeline2',
-            type: 'message',
-            sourceHandle: 'a',
-            data: { label: '1: login()' },
-            animated: true,
-          },
-          {
-            id: 'e2-3',
-            source: 'lifeline2',
-            target: 'lifeline3',
-            type: 'message',
-            sourceHandle: 'a',
-            data: { label: '2: validateCredentials()' },
-            animated: true,
-          },
-        ]
-
       case DiagramType.Activity:
         return [
           {
             id: 'e1-2',
             source: 'start1',
             target: 'activity1',
-            type: 'transition',
+            type: 'association',
           },
           {
             id: 'e2-3',
             source: 'activity1',
             target: 'decision1',
-            type: 'transition',
+            type: 'association',
           },
           {
             id: 'e3-4',
@@ -415,38 +275,6 @@ export function useUMLNodes() {
           },
         ]
 
-      case DiagramType.Communication:
-        return [
-          {
-            id: 'e1-2',
-            source: 'object1',
-            target: 'object2',
-            type: 'message',
-            data: { label: '1: request()' },
-          },
-          {
-            id: 'e2-3',
-            source: 'object2',
-            target: 'object3',
-            type: 'message',
-            data: { label: '2: query()' },
-          },
-          {
-            id: 'e3-2',
-            source: 'object3',
-            target: 'object2',
-            type: 'message',
-            data: { label: '3: result()' },
-          },
-          {
-            id: 'e2-1',
-            source: 'object2',
-            target: 'object1',
-            type: 'message',
-            data: { label: '4: response()' },
-          },
-        ]
-
       case DiagramType.InteractionOverview:
         return [
           {
@@ -466,17 +294,6 @@ export function useUMLNodes() {
             source: 'frame2',
             target: 'end1',
             type: 'transition',
-          },
-        ]
-
-      case DiagramType.Timing:
-        return [
-          {
-            id: 'e1-2',
-            source: 'timeline1',
-            target: 'timeline2',
-            type: 'dependency',
-            data: { label: 'triggers' },
           },
         ]
 

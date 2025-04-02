@@ -2,7 +2,7 @@
 
 import type React from 'react'
 
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useState } from 'react'
 import {
   type EdgeProps,
   getSmoothStepPath,
@@ -10,6 +10,7 @@ import {
   useReactFlow,
 } from 'reactflow'
 import { X } from 'lucide-react'
+import { Input } from '../ui/input'
 
 export const AssociationEdge = memo(
   ({
@@ -33,12 +34,30 @@ export const AssociationEdge = memo(
       targetY,
       targetPosition,
     })
-    const midX = (sourceX + targetX) / 2
-    const midY = (sourceY + targetY) / 2
     const handleDeleteEdge = useCallback(
       (event: React.MouseEvent) => {
         event.stopPropagation()
         setEdges((edges) => edges.filter((edge) => edge.id !== id))
+      },
+      [id, setEdges]
+    )
+    const [isEditing, setIsEditing] = useState(false)
+    const [label, setLabel] = useState(data?.label || '')
+
+    const handleLabelChange = useCallback(
+      (newLabel: string) => {
+        setLabel(newLabel)
+        setEdges((edges) =>
+          edges.map((edge) => {
+            if (edge.id === id) {
+              return {
+                ...edge,
+                data: { ...edge.data, label: newLabel },
+              }
+            }
+            return edge
+          })
+        )
       },
       [id, setEdges]
     )
@@ -49,30 +68,49 @@ export const AssociationEdge = memo(
           id={id}
           className='react-flow__edge-path stroke-gray-600'
           d={edgePath}
-          strokeWidth={1.5}
+          strokeWidth={3}
           markerEnd={markerEnd || 'url(#association-arrow)'}
         />
-        {data?.label && (
-          <EdgeLabelRenderer>
-            <div
-              style={{
-                position: 'absolute',
-                transform: `translate(-50%, -50%) translate(${midX}px,${midY}px)`,
-                pointerEvents: 'all',
-              }}
-              className='px-2 py-1 bg-white text-xs border border-gray-200 rounded nodrag shadow-sm'
-            >
-              {data.label}
-            </div>
-          </EdgeLabelRenderer>
-        )}
+        {/* Edge Label */}
+        <EdgeLabelRenderer>
+          <div
+            style={{
+              position: 'absolute',
+              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+              pointerEvents: 'all',
+              backgroundColor: 'white',
+            }}
+            className='nodrag'
+          >
+            {isEditing ? (
+              <Input
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+                onBlur={() => {
+                  handleLabelChange(label)
+                  setIsEditing(false)
+                }}
+                className='text-xs w-24 py-0 px-1 h-6'
+                autoFocus
+              />
+            ) : (
+              <div
+                className='px-2 py-0.5 bg-white text-xs border border-gray-200 rounded shadow-sm cursor-pointer'
+                onClick={() => setIsEditing(true)}
+              >
+                {label || ''}
+              </div>
+            )}
+          </div>
+        </EdgeLabelRenderer>
 
         {/* Delete button */}
         <EdgeLabelRenderer>
           <div
             style={{
               position: 'absolute',
-              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+              transform: `translate(50%, 50%) translate(${labelX}px,${labelY}px)`,
+
               pointerEvents: 'all',
             }}
             className='nodrag'

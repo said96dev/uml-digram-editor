@@ -11,12 +11,7 @@ import { useNodeUpdate } from '@/hooks/use-node-update'
 import { Input } from '../ui/input'
 
 export const TextNode = memo(({ data, selected, id }: NodeProps) => {
-  console.log('🚀 ~ TextNode ~ data:', data)
   const [text, setText] = useState(data.text || 'Text')
-  const [dimensions, setDimensions] = useState({
-    width: data?.width || 80,
-    height: data?.height || 50,
-  })
   const { updateNodeData } = useNodeUpdate()
   const handleTextChange = (newText: string) => {
     setText(newText)

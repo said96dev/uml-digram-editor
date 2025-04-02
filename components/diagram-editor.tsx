@@ -2,7 +2,7 @@
 
 import type React from 'react'
 
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactFlow, {
   addEdge,
   useNodesState,
@@ -17,8 +17,7 @@ import ReactFlow, {
   Panel,
   useReactFlow,
   ConnectionMode,
-  NodeProps,
-  EdgeLabelRenderer,
+  MarkerType,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { UMLDiagramSelector } from '@/components/uml-diagram-selector'
@@ -39,6 +38,8 @@ import { NoteNode } from '@/components/uml-nodes/note-node'
 import { ObjectNode } from '@/components/uml-nodes/object-node'
 import { TimelineNode } from '@/components/uml-nodes/timeline-node'
 import { StickyNote } from '@/components/uml-nodes/sticky-note'
+import { ForkNode } from '@/components/uml-nodes/fork-node'
+import { JoinNode } from '@/components/uml-nodes/join-node'
 
 // Import edge components directly
 import { AssociationEdge } from '@/components/uml-edges/association-edge'
@@ -46,7 +47,6 @@ import { GeneralizationEdge } from '@/components/uml-edges/generalization-edge'
 import { DependencyEdge } from '@/components/uml-edges/dependency-edge'
 import { MessageEdge } from '@/components/uml-edges/message-edge'
 import { TransitionEdge } from '@/components/uml-edges/transition-edge'
-import { Textarea } from './ui/textarea'
 import {
   Trash2,
   Save,
@@ -75,6 +75,8 @@ let nodeTypes: NodeTypes = {
   object: withDeleteButton(ObjectNode),
   timeline: withDeleteButton(TimelineNode),
   sticky: withDeleteButton(StickyNote),
+  fork: withDeleteButton(ForkNode),
+  join: withDeleteButton(JoinNode),
 }
 
 // Define custom edge types
@@ -98,6 +100,8 @@ nodeTypes = {
   timeline: withDeleteButton(TimelineNode),
   sticky: withDeleteButton(StickyNote),
   text: withDeleteButton(TextNode),
+  fork: withDeleteButton(ForkNode),
+  join: withDeleteButton(JoinNode),
 }
 export function DiagramEditor() {
   const [diagramType, setDiagramType] = useState<DiagramType>(
@@ -136,7 +140,6 @@ export function DiagramEditor() {
       if (savedDiagram) {
         const { savedNodes, savedEdges, savedDiagramType } =
           JSON.parse(savedDiagram)
-        console.log('🚀 ~ useEffect ~ savedNodes:', savedNodes)
         setNodes(savedNodes)
         setEdges(savedEdges)
         setDiagramType(savedDiagramType)
@@ -269,24 +272,18 @@ export function DiagramEditor() {
         case DiagramType.UseCase:
           edgeType = 'association'
           break
-        case DiagramType.Sequence:
-          edgeType = 'message'
-          break
+
         case DiagramType.State:
           edgeType = 'transition'
           break
-        case DiagramType.Communication:
-          edgeType = 'message'
-          break
+
         case DiagramType.Activity:
           edgeType = 'transition'
           break
         case DiagramType.InteractionOverview:
           edgeType = 'dependency'
           break
-        case DiagramType.Timing:
-          edgeType = 'generalization'
-          break
+
         default:
           edgeType = 'association'
       }
@@ -294,7 +291,7 @@ export function DiagramEditor() {
       const newEdge = {
         ...params,
         type: edgeType,
-        animated: diagramType === DiagramType.Sequence,
+        //animated: diagramType === DiagramType.UseCase,
         data: { label: '' },
       }
 
@@ -380,7 +377,7 @@ export function DiagramEditor() {
                   : newType === 'dependency'
                   ? 'url(#arrow)'
                   : newType === 'transition'
-                  ? 'url(#transition-arrow)'
+                  ? MarkerType.Arrow
                   : 'url(#arrow)',
             }
           }
@@ -454,7 +451,7 @@ export function DiagramEditor() {
             panOnScroll={true}
             panOnDrag={true}
             onPaneClick={handleClearSelection}
-            connectionLineStyle={{ stroke: '#006aff1a', strokeWidth: 4 }}
+            connectionLineStyle={{ stroke: '#ff00f21a', strokeWidth: 4 }}
             connectionMode={ConnectionMode.Loose}
             selectionOnDrag={true}
             multiSelectionKeyCode='Shift'
@@ -469,37 +466,41 @@ export function DiagramEditor() {
                   viewBox='0 0 10 10'
                   refX='8'
                   refY='5'
-                  markerWidth='6'
-                  markerHeight='6'
+                  markerWidth='2'
+                  markerHeight='2'
                   orient='auto-start-reverse'
                 >
-                  <path d='M 0 0 L 10 5 L 0 10 z' fill='currentColor' />
+                  <path
+                    d='M 0 0 L 10 5 L 0 10 z'
+                    fill='none'
+                    stroke='#4b4b4b'
+                  />
                 </marker>
                 <marker
                   id='association-arrow'
                   viewBox='0 0 10 10'
                   refX='8'
                   refY='5'
-                  markerWidth='6'
-                  markerHeight='6'
+                  markerWidth='8'
+                  markerHeight='8'
                   orient='auto-start-reverse'
                 >
-                  <path d='M 0 0 L 10 5 L 0 10 z' fill='#4B5563' />
+                  <path d='M 0 0 L 10 5 L 0 10 z' fill='#4b4b4b' />
                 </marker>
                 <marker
                   id='generalization-arrow'
                   viewBox='0 0 10 10'
                   refX='8'
                   refY='5'
-                  markerWidth='6'
-                  markerHeight='6'
+                  markerWidth='8'
+                  markerHeight='8'
                   orient='auto-start-reverse'
                 >
                   <path
                     d='M 0 0 L 10 5 L 0 10 z'
                     fill='white'
                     stroke='#4B5563'
-                    strokeWidth='1'
+                    strokeWidth='3'
                   />
                 </marker>
                 <marker
@@ -507,15 +508,15 @@ export function DiagramEditor() {
                   viewBox='0 0 10 10'
                   refX='8'
                   refY='5'
-                  markerWidth='6'
-                  markerHeight='6'
+                  markerWidth='2'
+                  markerHeight='2'
                   orient='auto-start-reverse'
                 >
                   <path
                     d='M 0 0 L 10 5 L 0 10'
                     fill='none'
-                    stroke='#4B5563'
-                    strokeWidth='1.5'
+                    stroke='#4b4b4b'
+                    strokeWidth='3'
                   />
                 </marker>
                 <marker
@@ -523,11 +524,11 @@ export function DiagramEditor() {
                   viewBox='0 0 10 10'
                   refX='8'
                   refY='5'
-                  markerWidth='6'
-                  markerHeight='6'
+                  markerWidth='2'
+                  markerHeight='2'
                   orient='auto-start-reverse'
                 >
-                  <path d='M 0 0 L 10 5 L 0 10 z' fill='#4B5563' />
+                  <path d='M 0 0 L 10 5 L 0 10 z' fill='#4b4b4b' />
                 </marker>
               </defs>
             </svg>
@@ -568,6 +569,7 @@ export function DiagramEditor() {
                       <ArrowUpRight className='h-4 w-4 mr-1' />
                       Generalization
                     </Button>
+
                     <Button
                       size='sm'
                       variant='outline'

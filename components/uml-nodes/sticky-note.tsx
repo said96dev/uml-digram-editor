@@ -59,7 +59,7 @@ export const StickyNote = memo(
           minWidth={100}
           minHeight={50}
           handleStyle={{ width: 8, height: 8 }}
-          lineStyle={{ stroke: '#1971c2', strokeWidth: 1 }}
+          lineStyle={{ stroke: '#1971c2', strokeWidth: 3 }}
           keepAspectRatio={false}
           onResize={(_, newDimensions) => {
             setDimensions(newDimensions)
