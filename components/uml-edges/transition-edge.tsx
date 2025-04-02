@@ -25,7 +25,6 @@ export const TransitionEdge = memo(
   }: EdgeProps) => {
     const { setEdges } = useReactFlow()
     const [isEditing, setIsEditing] = useState(false)
-    console.log('🚀 ~ isEditing:', isEditing)
     const [label, setLabel] = useState(data?.label || '')
     const [edgePath, labelX, labelY] = getSmoothStepPath({
       sourceX,

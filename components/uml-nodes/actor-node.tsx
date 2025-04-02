@@ -24,7 +24,6 @@ export const ActorNode = memo(
       setName(newText)
       updateNodeData(id, 'name', newText)
     }
-    console.log(data.name)
     return (
       <div
         className={` p-4 rounded-lg  shadow-md relative bg-blue-50 border-2 ${

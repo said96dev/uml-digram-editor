@@ -43,7 +43,6 @@ export function useNodeUpdate() {
    */
   const updateNodeDataBatch = useCallback(
     (nodeId: string, updates: Record<string, any>) => {
-      console.log(updates)
       setNodes((nodes) =>
         nodes.map((node) => {
           if (node.id === nodeId) {

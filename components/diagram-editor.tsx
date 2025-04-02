@@ -354,7 +354,6 @@ export function DiagramEditor() {
   // Function to change edge type
   const handleChangeEdgeType = useCallback(
     (edgeId: string, newType: string, label?: string) => {
-      console.log(label, newType)
       setEdges((eds) =>
         eds.map((edge) => {
           if (edge.id === edgeId) {
@@ -398,7 +397,6 @@ export function DiagramEditor() {
     (event: React.MouseEvent) => {
       const reactFlowBounds = reactFlowWrapper.current?.getBoundingClientRect()
       if (!reactFlowBounds) return
-      console.log(reactFlowBounds)
       const position = project({
         x: event.clientX,
         y: event.clientY - reactFlowBounds.height / 2,
