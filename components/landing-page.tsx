@@ -1,16 +1,13 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Activity,
   Code,
   Layers,
   GitBranch,
   Users,
-  Workflow,
-  Network,
-  Timer,
   LayoutGrid,
   ArrowRight,
   Github,
@@ -24,6 +21,7 @@ import {
   ChevronRight,
   Twitter,
   Database,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -35,23 +33,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
   const [activeFeature, setActiveFeature] = useState(0)
   const [activeTab, setActiveTab] = useState(0)
   const heroRef = useRef<HTMLDivElement>(null)
-  const isHeroInView = useInView(heroRef, { once: false })
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-  // Track mouse position for parallax effects
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      })
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [])
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   // Auto-rotate features
   useEffect(() => {
@@ -117,6 +99,11 @@ export function LandingPage({ onStart }: LandingPageProps) {
     },
   ]
 
+  const navItems = [
+    { name: 'Features', href: '#features' },
+    { name: 'How it Works', href: '#how-it-works' },
+    { name: 'Contact', href: '#contact' },
+  ]
   return (
     <div className='min-h-screen bg-[#0F172A] text-white overflow-hidden'>
       {/* Background elements */}
@@ -260,18 +247,70 @@ export function LandingPage({ onStart }: LandingPageProps) {
                   className='md:hidden relative w-10 h-10 flex items-center justify-center text-white'
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                  <div className='w-6 flex flex-col items-center space-y-1.5'>
-                    <motion.span className='block w-full h-0.5 bg-indigo-400 rounded-full' />
-                    <motion.span className='block w-3/4 h-0.5 bg-indigo-400 rounded-full self-end' />
-                    <motion.span className='block w-full h-0.5 bg-indigo-400 rounded-full' />
-                  </div>
+                  {isMenuOpen ? (
+                    <X className='h-6 w-6 text-white' />
+                  ) : (
+                    <div className='w-6 flex flex-col items-center space-y-1.5'>
+                      <motion.span className='block w-full h-0.5 bg-indigo-400 rounded-full' />
+                      <motion.span className='block w-3/4 h-0.5 bg-indigo-400 rounded-full self-end' />
+                      <motion.span className='block w-full h-0.5 bg-indigo-400 rounded-full' />
+                    </div>
+                  )}
                 </motion.button>
               </motion.div>
             </div>
           </div>
         </header>
-
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              className='md:hidden fixed top-[60px] left-0 right-0 bg-[#0F172A]/95 backdrop-blur-md border-b border-slate-800 z-40'
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className='container mx-auto px-6 py-4'>
+                <ul className='space-y-4'>
+                  {navItems.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      <a
+                        href={item.href}
+                        className='block py-2 text-slate-300 hover:text-white'
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.name}
+                      </a>
+                    </motion.li>
+                  ))}
+                  <motion.li
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navItems.length * 0.1 }}
+                  >
+                    <button
+                      onClick={() => {
+                        setIsMenuOpen(false)
+                        onStart()
+                      }}
+                      className='w-full py-2 px-4 mt-2 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-lg text-white font-medium'
+                    >
+                      Get Started
+                    </button>
+                  </motion.li>
+                </ul>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Hero Section */}
         <section
           ref={heroRef}
@@ -365,7 +404,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
 
               {/* Right side - Use Case Diagram */}
               <motion.div
-                className='w-full lg:w-1/2 relative'
+                className='w-full lg:w-1/2 relative hidden sm:block'
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}

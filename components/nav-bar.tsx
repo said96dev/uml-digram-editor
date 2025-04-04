@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Activity, Menu, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Activity, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -97,46 +97,53 @@ export function NavBar() {
             {isMenuOpen ? (
               <X className='h-6 w-6' />
             ) : (
-              <Menu className='h-6 w-6' />
+              <div className='w-6 flex flex-col items-center space-y-1.5'>
+                <motion.span className='block w-full h-0.5 bg-indigo-400 rounded-full' />
+                <motion.span className='block w-3/4 h-0.5 bg-indigo-400 rounded-full self-end' />
+                <motion.span className='block w-full h-0.5 bg-indigo-400 rounded-full' />
+              </div>
             )}
           </motion.button>
         </div>
       </div>
 
       {/* Mobile menu */}
-      {isMenuOpen && (
-        <motion.div
-          className='md:hidden absolute top-full left-0 right-0 bg-[#0F172A]/95 backdrop-blur-md border-b border-slate-800'
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-        >
-          <div className='container mx-auto px-6 py-4'>
-            <ul className='space-y-4'>
-              {navItems.map((item, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <Link
-                    href={item.path}
-                    className={`block py-2 ${
-                      pathname === item.path
-                        ? 'text-white font-medium'
-                        : 'text-slate-300 hover:text-white'
-                    }`}
-                    onClick={() => setIsMenuOpen(false)}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className='md:hidden fixed top-[60px] left-0 right-0 bg-[#0F172A]/95 backdrop-blur-md border-b border-slate-800 z-40'
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className='container mx-auto px-6 py-4'>
+              <ul className='space-y-4'>
+                {navItems.map((item, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
                   >
-                    {item.name}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-        </motion.div>
-      )}
+                    <Link
+                      href={item.path}
+                      className={`block py-2 ${
+                        pathname === item.path
+                          ? 'text-white font-medium'
+                          : 'text-slate-300 hover:text-white'
+                      }`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   )
 }
