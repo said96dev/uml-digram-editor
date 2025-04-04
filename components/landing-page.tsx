@@ -342,7 +342,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
                   </a>
                 </motion.div>
 
-                <motion.div
+                {/*               <motion.div
                   className='mt-8 flex items-center justify-center lg:justify-start gap-6'
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -360,7 +360,7 @@ export function LandingPage({ onStart }: LandingPageProps) {
                     <span className='text-white font-medium'>500+</span>{' '}
                     developers trust us
                   </div>
-                </motion.div>
+                </motion.div> */}
               </motion.div>
 
               {/* Right side - Use Case Diagram */}

@@ -23,7 +23,7 @@ export const ActivityNode = memo(
     }
     const [dimensions, setDimensions] = useState({
       width: data?.width || 100,
-      height: data?.height || 50,
+      height: data?.height || 100,
     })
     if (type === 'start') {
       return (
