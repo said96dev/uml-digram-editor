@@ -28,7 +28,7 @@ export default function Home() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className='h-screen w-full flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-700'
+        className='h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A]'
       >
         <motion.div
           className='flex flex-col items-center'
