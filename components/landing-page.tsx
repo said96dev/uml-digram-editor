@@ -24,6 +24,7 @@ import {
   X,
 } from 'lucide-react'
 import Link from 'next/link'
+import { ContactForm } from './contact-form'
 
 interface LandingPageProps {
   onStart: () => void
@@ -1010,75 +1011,8 @@ export function LandingPage({ onStart }: LandingPageProps) {
                 >
                   <h3 className='text-2xl font-bold mb-6'>Send a Message</h3>
 
-                  <div className='space-y-5'>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.3 }}
-                      viewport={{ once: true, margin: '-50px' }}
-                    >
-                      <label className='block text-slate-300 mb-2 text-sm'>
-                        Name
-                      </label>
-                      <div className='relative'>
-                        <input
-                          type='text'
-                          className='w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-indigo-500 transition-colors'
-                          placeholder='Your name'
-                        />
-                        <div className='absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-indigo-500/50 to-transparent'></div>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.4 }}
-                      viewport={{ once: true, margin: '-50px' }}
-                    >
-                      <label className='block text-slate-300 mb-2 text-sm'>
-                        Email
-                      </label>
-                      <div className='relative'>
-                        <input
-                          type='email'
-                          className='w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-indigo-500 transition-colors'
-                          placeholder='Your email'
-                        />
-                        <div className='absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-indigo-500/50 to-transparent'></div>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                      viewport={{ once: true, margin: '-50px' }}
-                    >
-                      <label className='block text-slate-300 mb-2 text-sm'>
-                        Message
-                      </label>
-                      <div className='relative'>
-                        <textarea
-                          className='w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-indigo-500 transition-colors min-h-[120px]'
-                          placeholder='Your message'
-                        ></textarea>
-                        <div className='absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-indigo-500/50 to-transparent'></div>
-                      </div>
-                    </motion.div>
-
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.6 }}
-                      viewport={{ once: true, margin: '-50px' }}
-                      className='pt-4'
-                    >
-                      <button className='w-full px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-medium hover:from-indigo-500 hover:to-violet-500 transition-all'>
-                        Send Message
-                      </button>
-                    </motion.div>
-                  </div>
+                  {/* Replace the existing form with the ContactForm component */}
+                  <ContactForm />
                 </motion.div>
               </div>
             </div>

@@ -98,13 +98,20 @@ export const StickyNote = memo(
           id='left'
         />
 
-        {/* Color change button - only visible when selected */}
         {selected && (
-          <div
-            className='absolute top-1 right-1 p-1 rounded-full bg-white shadow-sm cursor-pointer'
-            onClick={handleColorChange}
-          >
-            <GripVertical className='h-4 w-4 text-gray-500' />
+          <div className='absolute -bottom-8  flex gap-1 m-auto'>
+            {colors.map((color, index) => (
+              <div
+                key={color}
+                onClick={() => {
+                  setColorIndex(index)
+                  updateNodeData(id, 'color', color)
+                }}
+                className={`w-4 h-4 rounded-full cursor-pointer border ${
+                  index === colorIndex ? 'border-black' : 'border-transparent'
+                } ${color}`}
+              />
+            ))}
           </div>
         )}
 

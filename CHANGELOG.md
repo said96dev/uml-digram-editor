@@ -48,3 +48,11 @@
 ### Removed
 
 - Diagram cards on the landing page for unsupported types
+
+## [1.3.0] - 2025.04.04
+
+### Add
+
+- Add Resend to Contact Form
+- Replac Shadcn/ui Toast with Sonner toast
+- Colors in Note Node to Change

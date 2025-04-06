@@ -35,21 +35,18 @@
 
 npm install
 npm run dev
-
-
+```
 
 🧩 To-Do
- Replace Shadcn Toast with Sonner Toast
 
- Auto-save content to LocalStorage
+Auto-save content to LocalStorage
 
- Fix active tab styling in Editor
+Fix active tab styling in Editor
 
- Review and improve content in Features Page
+Review and improve content in Features Page
 
- Integrate Resend for functional contact form
+Integrate Resend for functional contact form
 
- Enable action tabs in Editor
+Enable action tabs in Editor
 
- Add Back Navigation to Editor
-```
+Add Back Navigation to Editor

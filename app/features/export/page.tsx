@@ -47,7 +47,7 @@ export default function ExportPage() {
             have you covered.
           </p>
           <Link
-            href='/'
+            href='/?editor=true'
             className='inline-flex items-center px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-medium hover:from-indigo-500 hover:to-violet-500 transition-all'
           >
             Try It Now

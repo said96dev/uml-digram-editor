@@ -25,7 +25,7 @@ import { UMLToolbar } from '@/components/uml-toolbar'
 import { useUMLNodes } from '@/hooks/use-uml-nodes'
 import { DiagramType } from '@/types/uml-types'
 import { Button } from '@/components/ui/button'
-import { toast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 // Import node components directly
 import { ActorNode } from '@/components/uml-nodes/actor-node'
@@ -124,16 +124,13 @@ export function DiagramEditor() {
       .then((html2canvas) => {
         const reactFlowContainer = document.querySelector('.react-flow')
         if (!reactFlowContainer) {
-          toast({
-            title: 'Export Failed',
+          toast.error('Export Failed', {
             description: 'Could not find the diagram to export.',
-            variant: 'destructive',
           })
           return
         }
 
-        toast({
-          title: 'Exporting Diagram',
+        toast.success('Exporting Diagram', {
           description: 'Preparing your diagram for export...',
         })
 
@@ -180,18 +177,15 @@ export function DiagramEditor() {
               .slice(0, 10)}.png`
             link.click()
 
-            toast({
-              title: 'Export Successful',
+            toast.success('Export Successful', {
               description: 'Your diagram has been exported as an image.',
             })
           })
           .catch((error) => {
             console.error('Error exporting diagram as image:', error)
-            toast({
-              title: 'Export Failed',
+            toast.error('Export Failed', {
               description:
                 'There was an error exporting your diagram as an image.',
-              variant: 'destructive',
             })
 
             // Restore display of controls and panels even if there's an error
@@ -205,10 +199,8 @@ export function DiagramEditor() {
       })
       .catch((error) => {
         console.error('Error loading html2canvas:', error)
-        toast({
-          title: 'Export Failed',
+        toast('Export Failed', {
           description: 'Could not load the image export library.',
-          variant: 'destructive',
         })
       })
   }, [])
@@ -224,16 +216,13 @@ export function DiagramEditor() {
         savedDiagramType: diagramType,
       }
       localStorage.setItem('umlDiagram', JSON.stringify(diagramData))
-      toast({
-        title: 'Diagram Saved',
+      toast.success('Diagram Saved', {
         description: 'Your diagram has been saved to local storage.',
       })
     } catch (error) {
       console.error('Error saving diagram to localStorage:', error)
-      toast({
-        title: 'Save Failed',
+      toast.error('Save Failed', {
         description: 'There was an error saving your diagram.',
-        variant: 'destructive',
       })
     }
   }, [nodes, edges, diagramType])
@@ -261,16 +250,13 @@ export function DiagramEditor() {
       linkElement.setAttribute('download', exportFileDefaultName)
       linkElement.click()
 
-      toast({
-        title: 'Diagram Exported',
+      toast.success('Diagram Exported', {
         description: 'Your diagram has been exported as a JSON file.',
       })
     } catch (error) {
       console.error('Error exporting diagram:', error)
-      toast({
-        title: 'Export Failed',
+      toast.error('Export Failed', {
         description: 'There was an error exporting your diagram.',
-        variant: 'destructive',
       })
     }
   }, [getNodes, getEdges, diagramType])
@@ -328,8 +314,7 @@ export function DiagramEditor() {
                   // Set a timeout to fit view
                   fitView({ padding: 0.5, duration: 800 })
 
-                  toast({
-                    title: 'Diagram Imported',
+                  toast.success('Diagram Imported', {
                     description:
                       'Your diagram has been imported and saved to local storage.',
                   })
@@ -353,8 +338,7 @@ export function DiagramEditor() {
                 // Set a timeout to fit view
                 fitView({ padding: 0.5, duration: 800 })
 
-                toast({
-                  title: 'Diagram Imported',
+                toast.success('Diagram Imported', {
                   description:
                     'Your diagram has been imported and saved to local storage.',
                 })
@@ -365,10 +349,8 @@ export function DiagramEditor() {
           }
         } catch (error) {
           console.error('Error importing diagram:', error)
-          toast({
-            title: 'Import Failed',
+          toast.error('Import Failed', {
             description: 'The selected file is not a valid UML diagram.',
-            variant: 'destructive',
           })
         }
       }
@@ -383,8 +365,7 @@ export function DiagramEditor() {
   const handleClearAll = useCallback(() => {
     setNodes([])
     setEdges([])
-    toast({
-      title: 'Diagram Cleared',
+    toast.success('Diagram Cleared', {
       description: 'All elements have been removed from the diagram.',
     })
   }, [setNodes, setEdges])
@@ -469,8 +450,7 @@ export function DiagramEditor() {
           fitView({ padding: 0.5, duration: 800 })
         }, 100)
 
-        toast({
-          title: 'Diagram Loaded',
+        toast.success('Diagram Loaded', {
           description: 'Your saved diagram has been loaded successfully.',
         })
         return
@@ -553,8 +533,7 @@ export function DiagramEditor() {
   // Ersetzen Sie die Implementierung der Funktion
   const handleDeleteAllEdges = useCallback(() => {
     setEdges([])
-    toast({
-      title: 'All Edges Deleted',
+    toast.success('All Edges Deleted', {
       description: 'All connections have been removed from the diagram.',
     })
   }, [setEdges])
@@ -704,8 +683,7 @@ export function DiagramEditor() {
         })
       )
 
-      toast({
-        title: 'Edge Type Changed',
+      toast.info('Edge Type Changed', {
         description: `Connection type changed to ${newType}`,
       })
     },
@@ -731,8 +709,7 @@ export function DiagramEditor() {
 
       setNodes((nds) => nds.concat(newNode))
 
-      toast({
-        title: 'Text Added',
+      toast.success('Text Added', {
         description: 'Text node added to diagram. Click to edit.',
       })
     },

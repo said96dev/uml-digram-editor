@@ -310,7 +310,7 @@ export default function DiagramTypesPage() {
           types in one intuitive interface.
         </p>
 
-        <Link href='/'>
+        <Link href='/?editor=true'>
           <motion.button
             className='px-8 py-4 rounded-lg bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-medium hover:from-indigo-500 hover:to-violet-500 transition-all relative'
             whileHover={{ scale: 1.05 }}

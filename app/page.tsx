@@ -12,12 +12,18 @@ export default function Home() {
   const [showEditor, setShowEditor] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Simulate loading for a smoother experience
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const serchParams = new URLSearchParams(window.location.search)
+    const editor = serchParams.get('editor')
+    if (editor === 'true') {
+      setShowEditor(true)
       setIsLoading(false)
-    }, 2000)
-    return () => clearTimeout(timer)
+    } else {
+      const timer = setTimeout(() => {
+        setIsLoading(false)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
   }, [])
 
   if (isLoading) {
