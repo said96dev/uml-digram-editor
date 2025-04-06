@@ -110,11 +110,331 @@ export function DiagramEditor() {
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
   const reactFlowWrapper = useRef<HTMLDivElement>(null)
-  const { project, fitView } = useReactFlow()
+  const { project, fitView, getNodes, getEdges } = useReactFlow()
   const { getNodesByDiagramType, getInitialEdges } = useUMLNodes()
   const [isSelecting, setIsSelecting] = useState(false)
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null)
 
+  // Function to export diagram as image
+  const handleExportAsImage = useCallback(() => {
+    if (!reactFlowWrapper.current) return
+
+    // Import html2canvas dynamically
+    import('html2canvas')
+      .then((html2canvas) => {
+        const reactFlowContainer = document.querySelector('.react-flow')
+        if (!reactFlowContainer) {
+          toast({
+            title: 'Export Failed',
+            description: 'Could not find the diagram to export.',
+            variant: 'destructive',
+          })
+          return
+        }
+
+        toast({
+          title: 'Exporting Diagram',
+          description: 'Preparing your diagram for export...',
+        })
+
+        // Hide controls and panels temporarily for clean export
+        const controls = document.querySelector('.react-flow__controls')
+        const panels = document.querySelectorAll('.react-flow__panel')
+        const minimap = document.querySelector('.react-flow__minimap')
+
+        // Store original display values
+        // const controlsDisplay = view?.style.display
+        const panelsDisplay = Array.from(panels).map(
+          (panel) => (panel as HTMLElement).style.display
+        )
+        //        const minimapDisplay = minimap?.style.display
+
+        // Hide elements for screenshot
+        // if (controls) controls.style.display = 'none'
+        panels.forEach(
+          (panel) => ((panel as HTMLElement).style.display = 'none')
+        )
+        // if (minimap) minimap.style.display = 'none'
+
+        // Take screenshot
+        html2canvas
+          .default(reactFlowContainer as HTMLElement, {
+            backgroundColor: '#f9fafb', // Light gray background
+            scale: 2, // Higher resolution
+          })
+          .then((canvas) => {
+            // Restore display of controls and panels
+            //  if (controls) controls.style.display = controlsDisplay || ''
+            panels.forEach(
+              (panel, i) =>
+                ((panel as HTMLElement).style.display = panelsDisplay[i] || '')
+            )
+            // if (minimap) minimap.style.display = minimapDisplay || ''
+
+            // Convert to image and download
+            const image = canvas.toDataURL('image/png')
+            const link = document.createElement('a')
+            link.href = image
+            link.download = `uml-diagram-${new Date()
+              .toISOString()
+              .slice(0, 10)}.png`
+            link.click()
+
+            toast({
+              title: 'Export Successful',
+              description: 'Your diagram has been exported as an image.',
+            })
+          })
+          .catch((error) => {
+            console.error('Error exporting diagram as image:', error)
+            toast({
+              title: 'Export Failed',
+              description:
+                'There was an error exporting your diagram as an image.',
+              variant: 'destructive',
+            })
+
+            // Restore display of controls and panels even if there's an error
+            //  if (controls) controls.style.display = controlsDisplay || ''
+            panels.forEach(
+              (panel, i) =>
+                ((panel as HTMLElement).style.display = panelsDisplay[i] || '')
+            )
+            //    if (minimap) minimap.style.display = minimapDisplay || ''
+          })
+      })
+      .catch((error) => {
+        console.error('Error loading html2canvas:', error)
+        toast({
+          title: 'Export Failed',
+          description: 'Could not load the image export library.',
+          variant: 'destructive',
+        })
+      })
+  }, [])
+
+  // Add this right after the variable declarations at the top of the component
+
+  // Function to save diagram to localStorage
+  const handleSaveDiagram = useCallback(() => {
+    try {
+      const diagramData = {
+        savedNodes: nodes,
+        savedEdges: edges,
+        savedDiagramType: diagramType,
+      }
+      localStorage.setItem('umlDiagram', JSON.stringify(diagramData))
+      toast({
+        title: 'Diagram Saved',
+        description: 'Your diagram has been saved to local storage.',
+      })
+    } catch (error) {
+      console.error('Error saving diagram to localStorage:', error)
+      toast({
+        title: 'Save Failed',
+        description: 'There was an error saving your diagram.',
+        variant: 'destructive',
+      })
+    }
+  }, [nodes, edges, diagramType])
+
+  // Function to export diagram as JSON
+  const handleExportDiagram = useCallback(() => {
+    try {
+      const diagramData = {
+        nodes: getNodes(),
+        edges: getEdges(),
+        diagramType,
+      }
+
+      const dataStr = JSON.stringify(diagramData, null, 2)
+      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(
+        dataStr
+      )}`
+
+      const exportFileDefaultName = `uml-diagram-${new Date()
+        .toISOString()
+        .slice(0, 10)}.json`
+
+      const linkElement = document.createElement('a')
+      linkElement.setAttribute('href', dataUri)
+      linkElement.setAttribute('download', exportFileDefaultName)
+      linkElement.click()
+
+      toast({
+        title: 'Diagram Exported',
+        description: 'Your diagram has been exported as a JSON file.',
+      })
+    } catch (error) {
+      console.error('Error exporting diagram:', error)
+      toast({
+        title: 'Export Failed',
+        description: 'There was an error exporting your diagram.',
+        variant: 'destructive',
+      })
+    }
+  }, [getNodes, getEdges, diagramType])
+
+  // Function to import diagram from JSON
+  const handleImportDiagram = useCallback(() => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
+
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement
+      if (!target.files?.length) return
+
+      const file = target.files[0]
+      const reader = new FileReader()
+
+      reader.onload = (event) => {
+        try {
+          const result = event.target?.result
+          if (typeof result !== 'string') return
+
+          const importedData = JSON.parse(result)
+
+          if (
+            importedData.nodes &&
+            importedData.edges &&
+            importedData.diagramType
+          ) {
+            // Check if there's an existing diagram
+            if (nodes.length > 0 || edges.length > 0) {
+              // Create a confirmation dialog
+              if (
+                window.confirm(
+                  'Do you want to replace your current diagram with the imported one? This action cannot be undone.'
+                )
+              ) {
+                // Replace the current diagram
+                setNodes(importedData.nodes)
+                setEdges(importedData.edges)
+                setDiagramType(importedData.diagramType)
+
+                // Save to localStorage automatically
+                setTimeout(() => {
+                  const diagramData = {
+                    savedNodes: importedData.nodes,
+                    savedEdges: importedData.edges,
+                    savedDiagramType: importedData.diagramType,
+                  }
+                  localStorage.setItem(
+                    'umlDiagram',
+                    JSON.stringify(diagramData)
+                  )
+
+                  // Set a timeout to fit view
+                  fitView({ padding: 0.5, duration: 800 })
+
+                  toast({
+                    title: 'Diagram Imported',
+                    description:
+                      'Your diagram has been imported and saved to local storage.',
+                  })
+                }, 100)
+              }
+            } else {
+              // No existing diagram, just import
+              setNodes(importedData.nodes)
+              setEdges(importedData.edges)
+              setDiagramType(importedData.diagramType)
+
+              // Save to localStorage automatically
+              setTimeout(() => {
+                const diagramData = {
+                  savedNodes: importedData.nodes,
+                  savedEdges: importedData.edges,
+                  savedDiagramType: importedData.diagramType,
+                }
+                localStorage.setItem('umlDiagram', JSON.stringify(diagramData))
+
+                // Set a timeout to fit view
+                fitView({ padding: 0.5, duration: 800 })
+
+                toast({
+                  title: 'Diagram Imported',
+                  description:
+                    'Your diagram has been imported and saved to local storage.',
+                })
+              }, 100)
+            }
+          } else {
+            throw new Error('Invalid diagram format')
+          }
+        } catch (error) {
+          console.error('Error importing diagram:', error)
+          toast({
+            title: 'Import Failed',
+            description: 'The selected file is not a valid UML diagram.',
+            variant: 'destructive',
+          })
+        }
+      }
+
+      reader.readAsText(file)
+    }
+
+    input.click()
+  }, [nodes, edges, setNodes, setEdges, setDiagramType, fitView])
+
+  // Function to clear all nodes and edges
+  const handleClearAll = useCallback(() => {
+    setNodes([])
+    setEdges([])
+    toast({
+      title: 'Diagram Cleared',
+      description: 'All elements have been removed from the diagram.',
+    })
+  }, [setNodes, setEdges])
+
+  // Listen for toolbar actions
+  useEffect(() => {
+    const handleToolbarAction = (event: CustomEvent) => {
+      const { action } = event.detail
+
+      switch (action) {
+        case 'save':
+          handleSaveDiagram()
+          break
+        case 'export':
+          handleExportDiagram()
+          break
+        case 'exportImage':
+          handleExportAsImage()
+          break
+        case 'import':
+          handleImportDiagram()
+          break
+        case 'clear':
+          handleClearAll()
+          break
+        default:
+          break
+      }
+    }
+
+    // Add event listener
+    document.addEventListener(
+      'uml-toolbar-action',
+      handleToolbarAction as EventListener
+    )
+
+    // Clean up
+    return () => {
+      document.removeEventListener(
+        'uml-toolbar-action',
+        handleToolbarAction as EventListener
+      )
+    }
+  }, [
+    handleSaveDiagram,
+    handleExportDiagram,
+    handleExportAsImage,
+    handleImportDiagram,
+    handleClearAll,
+  ])
   // Add this right after the variable declarations at the top of the component
   useEffect(() => {
     // This prevents the ResizeObserver loop limit exceeded error
@@ -239,7 +559,7 @@ export function DiagramEditor() {
     })
   }, [setEdges])
 
-  // Function to save diagram to localStorage
+  /*   // Function to save diagram to localStorage
   const handleSaveDiagram = useCallback(() => {
     try {
       const diagramData = {
@@ -260,7 +580,7 @@ export function DiagramEditor() {
         variant: 'destructive',
       })
     }
-  }, [nodes, edges, diagramType])
+  }, [nodes, edges, diagramType]) */
 
   // Fix the onConnect function to properly handle connections based on diagram type
   const onConnect = useCallback(

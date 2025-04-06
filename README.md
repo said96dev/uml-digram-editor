@@ -1,40 +1,55 @@
-# DONE:
+# Uml-Diagram-Editor – Web-Based Diagram Editor
 
-1. Text Loss on Page Refresh
+**Uml-Diagram-Editor** is a modern web-based diagram editor built with Next.js. It allows users to easily create and customize different types of diagrams. The project emphasizes smooth UX, reactivity, and extendability.
 
-- The text in the text node disappers after refershing the page. Ensure that the text is saved in LocalStorage.
+---
 
-2. Node Size Persistence
+## 🚀 Features
 
-- After refershing the page, the size on the node should remain the same as it was when
-  the user left the page.
+- ✍️ Drag & Drop Diagram Editor
+- 📈 Supports 6+ diagram types (flowcharts, etc.)
+- 🔧 Custom Node Types and Styling
+- 🔗 Various Connection Types
+- 🎨 Framer Motion animations on Landing Page
+- 📤 Export and Save functionality
+- 💾 LocalStorage support (Auto-Save coming soon)
+- 📨 Contact Form (styling implemented)
 
-# Removed
+---
 
-1. sequence diagram
+## ⚙️ Tech Stack
 
-- The sequence diagram initail Template dosent look like a squence diagram
+- **Next.js** – React Framework
+- **TypeScript** – Type-safe development
+- **Tailwind CSS** – Utility-first CSS framework
+- **Shadcn/UI** – Modern UI Components
+- **Framer Motion** – Animation Library
+- **LocalStorage** – Client-side data persistence
+- **React Flow** – Diagram logic and rendering
 
-2. sequence diagram componente
+---
 
-- the list of the sequence diagram components is not complete
+## 📦 Installation
 
-3. sequence diagram logic
+```bash
 
-- the sequence diagram logic is not correct (missig the lifeline Node with the activeline and stopped method.)
+npm install
+npm run dev
 
-# DONE
 
-1. remove cards form Landingpage of diagrams that are not supported
-2. add Framer motion to the Landingpage
-3. add Featurs Pages (export ,local-storage ,layout, design)
 
-# Todo
+🧩 To-Do
+ Replace Shadcn Toast with Sonner Toast
 
-1. Toast Shadcnui replace With Sonner Toast.
-2. Autmatical Save in the loaclstorage.
-3. Active Tab Styling Bug
-4. Review all content und description in FeatuersPage
-5. Integrate Resend with Form
-6. Action Tabs in der Editor haven currently no effect.
-7. Back Navigation in Editor
+ Auto-save content to LocalStorage
+
+ Fix active tab styling in Editor
+
+ Review and improve content in Features Page
+
+ Integrate Resend for functional contact form
+
+ Enable action tabs in Editor
+
+ Add Back Navigation to Editor
+```

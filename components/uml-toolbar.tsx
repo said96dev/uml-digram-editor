@@ -11,8 +11,6 @@ import {
   Circle,
   Square,
   FileText,
-  Box,
-  Clock,
   Diamond,
   Download,
   Upload,
@@ -23,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Type,
+  FileImage,
 } from 'lucide-react'
 
 interface UMLToolbarProps {
@@ -377,6 +376,13 @@ export function UMLToolbar({ diagramType }: UMLToolbarProps) {
             <Button
               variant='outline'
               className='h-14 flex flex-col items-center justify-center gap-1 bg-blue-50 hover:bg-blue-100'
+              onClick={() => {
+                // Dispatch a custom event that the DiagramEditor can listen for
+                const event = new CustomEvent('uml-toolbar-action', {
+                  detail: { action: 'save' },
+                })
+                document.dispatchEvent(event)
+              }}
             >
               <Save className='h-5 w-5' />
               <span className='text-xs'>Save</span>
@@ -384,6 +390,13 @@ export function UMLToolbar({ diagramType }: UMLToolbarProps) {
             <Button
               variant='outline'
               className='h-14 flex flex-col items-center justify-center gap-1 bg-blue-50 hover:bg-blue-100'
+              onClick={() => {
+                // Dispatch a custom event that the DiagramEditor can listen for
+                const event = new CustomEvent('uml-toolbar-action', {
+                  detail: { action: 'import' },
+                })
+                document.dispatchEvent(event)
+              }}
             >
               <Upload className='h-5 w-5' />
               <span className='text-xs'>Load</span>
@@ -391,6 +404,13 @@ export function UMLToolbar({ diagramType }: UMLToolbarProps) {
             <Button
               variant='outline'
               className='h-14 flex flex-col items-center justify-center gap-1 bg-blue-50 hover:bg-blue-100'
+              onClick={() => {
+                // Dispatch a custom event that the DiagramEditor can listen for
+                const event = new CustomEvent('uml-toolbar-action', {
+                  detail: { action: 'export' },
+                })
+                document.dispatchEvent(event)
+              }}
             >
               <Download className='h-5 w-5' />
               <span className='text-xs'>Export</span>
@@ -398,6 +418,27 @@ export function UMLToolbar({ diagramType }: UMLToolbarProps) {
             <Button
               variant='outline'
               className='h-14 flex flex-col items-center justify-center gap-1 bg-blue-50 hover:bg-blue-100'
+              onClick={() => {
+                // Dispatch a custom event that the DiagramEditor can listen for
+                const event = new CustomEvent('uml-toolbar-action', {
+                  detail: { action: 'exportImage' },
+                })
+                document.dispatchEvent(event)
+              }}
+            >
+              <FileImage className='h-5 w-5' />
+              <span className='text-xs'>Export PNG</span>
+            </Button>
+            <Button
+              variant='outline'
+              className='h-14 flex flex-col items-center justify-center gap-1 bg-blue-50 hover:bg-blue-100'
+              onClick={() => {
+                // Dispatch a custom event that the DiagramEditor can listen for
+                const event = new CustomEvent('uml-toolbar-action', {
+                  detail: { action: 'clear' },
+                })
+                document.dispatchEvent(event)
+              }}
             >
               <Trash2 className='h-5 w-5' />
               <span className='text-xs'>Clear</span>
